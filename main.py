@@ -1,4 +1,4 @@
-from WeatherDB import *
+from Weather_DB import *
 
 def run():
     test = WeatherDB()
