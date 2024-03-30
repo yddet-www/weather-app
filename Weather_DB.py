@@ -57,7 +57,7 @@ class WeatherDB:
         table_columns = self.list_columns(table)
         params = ("%s",)
         
-        table_tuple = ", ".join( table_columns)
+        table_tuple = ", ".join(table_columns)
         
         for _ in range(1, len(table_columns)):
             params = params + ("%s",)
