@@ -2,8 +2,9 @@ from weatherDB import *
 
 def run():
     test = weatherDB()
-    for x in test.get_tables():
-        print(x)
+    print(test.list_columns('hourly_forecast'))
+    print(test.get_tables())
+    test.close()
 
 if __name__ == "__main__":
     run()
