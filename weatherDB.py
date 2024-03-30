@@ -1,7 +1,7 @@
 import mysql.connector
 from mysql.connector import errorcode
 
-class weatherDB:
+class WeatherDB:
     def __init__(self):
         self.connection = mysql.connector.connect(
             host = "127.0.0.1", 
@@ -21,17 +21,20 @@ class weatherDB:
     
     # Returns a tuple of a table's columns
     def list_columns(self, table):
+        tuple = ()
+        
         self.cursor.execute(f"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{table}'")
-        columns = [column[0] for column in self.cursor.fetchall()]  # re-list into a list of strings instead of 
-                                                                    # a list of tuples containing 1 string
-        return columns
+        for column in self.cursor.fetchall():
+            tuple = tuple + column            
+        
+        return tuple
     
     # For the sake of the video
-    def create_table(self, table,):
+    def create_table(self, table, tuple):
         return None
     
     # Insert tuple onto target table
-    def insert(self):
+    def insert(self, table, tuple):
         return None
     
     # Thinking of creating seperate read functions for each table, but idk
