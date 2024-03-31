@@ -91,15 +91,15 @@ class WeatherDB:
         result = None
         pk = ", ".join(self.get_pk(table))
         
+        stmt = stmt + " ORDER BY " + pk
+        
         if row != -1:
             stmt = stmt + f" LIMIT {row}"
             
-        stmt = stmt + " ORDER BY " + pk
-            
         self.cursor.execute(stmt)
         result = self.cursor.fetchall()            
-                                            # Ordering is kinda unpredictable, since it works with any table
-        return result                       # so there is no way of standardizing, as of yet
+
+        return result
     
     # Update existing values of existing table
     def update(self):   
