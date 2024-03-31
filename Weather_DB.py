@@ -85,7 +85,6 @@ class WeatherDB:
         return 1
     
     # Returns a list of tuples from a given table
-    # Thinking of creating seperate read functions for each table, but idk
     def read(self, table, row = -1):
         stmt = f"SELECT * FROM {table}"
         result = None
@@ -102,7 +101,7 @@ class WeatherDB:
         return result
     
     # Update existing values of existing table
-    def update(self):   
+    def update(self, table, cond):
         return None
     
     # Delete tuple from existing table
