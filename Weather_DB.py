@@ -31,9 +31,19 @@ class WeatherDB:
         
         return tuple
     
+    # Return a list of primary key(s)
     def get_pk(self, table):
-        stmt = f"SHOW KEYS FROM `{table}` WHERE Key_name = 'PRIMARY'"
-        return 1
+        stmt = (
+            "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE "
+            f"WHERE TABLE_NAME = '{table}' AND CONSTRAINT_NAME = 'PRIMARY'")
+        
+        pk = ()
+        self.cursor.execute(stmt)
+        
+        for key in self.cursor.fetchall():
+            pk = pk + key
+        
+        return pk
     
     # For the sake of the video
     def create_table(self, table):
@@ -79,9 +89,12 @@ class WeatherDB:
     def read(self, table, row = -1):
         stmt = f"SELECT * FROM {table}"
         result = None
+        pk = ", ".join(self.get_pk(table))
         
         if row != -1:
             stmt = stmt + f" LIMIT {row}"
+            
+        stmt = stmt + " ORDER BY " + pk
             
         self.cursor.execute(stmt)
         result = self.cursor.fetchall()            

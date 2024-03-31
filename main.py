@@ -39,10 +39,12 @@ def run():
     # print(test.insert("location", data))
     
     ## TESTING READ FUNCTION
-    '''
     for x in test.read("location"):
         print(x)
-    '''
+    
+    
+    ## TESTING GET PK
+    print(test.get_pk("location"))
     
     test.close()
 
