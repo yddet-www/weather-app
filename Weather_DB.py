@@ -21,7 +21,7 @@ class WeatherDB:
         return tables
     
     # Returns a tuple of a table's columns
-    def list_columns(self, table):
+    def get_columns(self, table):
         tuple = ()
         
         # Order by ordinal_postion basically follows the ordering as it is defined, TLDR follows the column order as seen in MySQL
@@ -30,6 +30,10 @@ class WeatherDB:
             tuple = tuple + column            
         
         return tuple
+    
+    def get_pk(self, table):
+        stmt = f"SHOW KEYS FROM `{table}` WHERE Key_name = 'PRIMARY'"
+        return 1
     
     # For the sake of the video
     def create_table(self, table):
@@ -54,7 +58,7 @@ class WeatherDB:
     
     # Insert data(s) into target table
     def insert(self, table, data):
-        table_columns = self.list_columns(table)
+        table_columns = self.get_columns(table)
         params = ("%s",)
         
         table_tuple = ", ".join(table_columns)
@@ -69,10 +73,20 @@ class WeatherDB:
         self.connection.commit()
         
         return 1
-        
+    
+    # Returns a list of tuples from a given table
     # Thinking of creating seperate read functions for each table, but idk
-    def read(self):
-        return None
+    def read(self, table, row = -1):
+        stmt = f"SELECT * FROM {table}"
+        result = None
+        
+        if row != -1:
+            stmt = stmt + f" LIMIT {row}"
+            
+        self.cursor.execute(stmt)
+        result = self.cursor.fetchall()            
+                                            # Ordering is kinda unpredictable, since it works with any table
+        return result                       # so there is no way of standardizing, as of yet
     
     # Update existing values of existing table
     def update(self):   
