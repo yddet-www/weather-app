@@ -103,9 +103,17 @@ class WeatherDB:
     # Update existing values of existing table
     # Condition limited to PK comparison, and data_pair is expecting a tuple pair
     def update(self, table, pk_cond, data_pair):
-        stmt = f"UPDATE {table} SET {data_pair[0]} = '{data_pair[1]}'"
-        cond = f" WHERE "
-        return None
+        stmt = f"UPDATE {table} SET {data_pair[0]} = '{data_pair[1]}' "
+        pk = self.get_pk(table)
+        cond = f"WHERE {pk[0]} = '{pk_cond[0]}'"
+        
+        for i in range(1, len(pk)):
+            cond = cond + f" AND {pk[i]} = '{pk_cond[i]}'"
+        
+        stmt = stmt + cond
+        self.cursor.execute(stmt)
+        
+        return 1
     
     # Delete tuple from existing table
     def delete(self):

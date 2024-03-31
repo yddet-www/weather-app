@@ -5,7 +5,7 @@ def run():
     
     ## TESTING LIST COLUMN FUNCTION
     # print(test.get_columns('hourly_forecast'))
-    # print(test.get_columns('location'))
+    print(test.get_columns('location'))
 
     
     ## TESTING CREATING AND DROPPING TABLE FUNCTION
@@ -36,15 +36,19 @@ def run():
         ('45.5051', '-122.6750', 'OR', 'Portland', '97201', '3rd District')]
     '''
     
-    # print(test.insert("location", data))
+    # print(test.insert("location", [('10.0000', '10.0000', 'BT', 'Bumi Serpong Damai', '15321', 'Taman Jajan')]))
     
     ## TESTING READ FUNCTION
+    '''
     for x in test.read("location"):
         print(x)
-    
+    '''
     
     ## TESTING GET PK
-    print(test.get_pk("location"))
+    # print(test.get_pk("location"))
+
+    ## TESTING UPDATE
+    print(test.update("location", ('10.0000', '10.0000'), ("county", "Depok")))
     
     test.close()
 
