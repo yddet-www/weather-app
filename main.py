@@ -38,17 +38,18 @@ def run():
     
     # print(test.insert("location", [('10.0000', '10.0000', 'BT', 'Bumi Serpong Damai', '15321', 'Taman Jajan')]))
     
-    ## TESTING READ FUNCTION
-    '''
-    for x in test.read("location"):
-        print(x)
-    '''
-    
     ## TESTING GET PK
     # print(test.get_pk("location"))
 
     ## TESTING UPDATE
-    print(test.update("location", ('10.0000', '10.0000'), ("county", "Depok")))
+    # print(test.update("location", ('10.0000', '10.0000'), ("county", "Depok")))
+    
+    ## TESTING DELETE
+    print(test.delete("location", ('10.0000', '10.0000')))
+    
+    ## TESTING READ FUNCTION
+    for x in test.read("location"):
+        print(x)
     
     test.close()
 

@@ -116,8 +116,18 @@ class WeatherDB:
         return 1
     
     # Delete tuple from existing table
-    def delete(self):
-        return None
+    def delete(self, table, pk_cond):
+        pk = self.get_pk(table)
+        cond = f"WHERE {pk[0]} = '{pk_cond[0]}'"
+       
+        for i in range(1, len(pk)):
+            cond += f" AND {pk[i]} = '{pk_cond[i]}'"
+       
+        stmt = f"DELETE FROM {table} {cond}"
+        self.cursor.execute(stmt)
+        self.connection.commit()
+       
+        return 1
     
     # ALWAYS CALL AFTER FINISHED
     def close(self):
