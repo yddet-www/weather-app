@@ -19,6 +19,7 @@ def tes():
     '''
     
     ## TESTING INSERT FUNCTION
+    '''
     location_data = [
         ('37.7749', '-122.4194', 'CA', 'San Francisco', '94105', '7th District'),
         ('40.7128', '-74.0060', 'NY', 'New York', '10001', '9th District'),
@@ -35,6 +36,7 @@ def tes():
         ('39.7392', '-104.9903', 'CO', 'Denver', '80201', '2nd District'),
         ('33.7490', '-84.3880', 'GA', 'Atlanta', '30301', '5th District'),
         ('45.5051', '-122.6750', 'OR', 'Portland', '97201', '3rd District')]
+    '''
     
     # print(test.insert("location", [('10.0000', '10.0000', 'BT', 'Bumi Serpong Damai', '15321', 'Taman Jajan')]))
 
@@ -85,8 +87,20 @@ Choose option:
                     print("Inserting...")
                 
             case 2:
-                pass
-            
+                print(main.get_tables())
+                table = input("Select a table name from the above existing ones:\n")
+                
+                conds = tuple(input(
+                    "Input the target row's PK, separate by commas\n" +
+                    str(main.get_pk(table)) + "\n").split(", "))
+                
+                data_pair = tuple(input(
+                    "Input a column and its new value, separate by commas:\n" +
+                    str(main.get_columns(table)) + "\n").split(", "))
+                
+                if main.update(table, conds, data_pair):
+                    print("Updating...")
+
             case 3:
                 print(main.get_tables())
                 table = input("Select a table name from the above existing ones:\n")
@@ -101,9 +115,18 @@ Choose option:
                     print(x)
 
             case 4:
-                pass
+                print(main.get_tables())
+                table = input("Select a table name from the above existing ones:\n")
+                
+                target = tuple(input(
+                    "Input the target row's PK, separate by commas\n" +
+                    str(main.get_pk(table)) + "\n").split(", "))
+                
+                if main.delete(table, target):
+                    print("Deleting...")
 
             case _:
+                main.close()
                 flag = False
 
 if __name__ == "__main__":
