@@ -1,6 +1,6 @@
 from Weather_DB import *
 
-def run():
+def tes():
     test = WeatherDB()
     
     ## TESTING LIST COLUMN FUNCTION
@@ -52,5 +52,60 @@ def run():
     
     test.close()
 
+def run():
+    main = WeatherDB()
+    flag = True
+
+    while flag:
+        user = int(input(
+"""
+Choose option:
+1) INSERT data
+2) UPDATE data
+3) READ data
+4) DELETE data
+5) EXIT
+"""))
+        match user:
+            case 1:
+                print(main.get_tables())
+                table = input("Select a table name from the above existing ones:\n")
+                data = []
+                
+                row = tuple(input(
+                    "Input data following order of columns, separate by commas\n" + 
+                    "Enter an empty input to end collection\n" +
+                    str(main.get_columns(table)) + "\n").split(", "))
+                
+                while row != ('',):
+                    data.append(row)
+                    row = tuple(input().split(", "))
+                                        
+                if main.insert(table, data):
+                    print("Inserting...")
+                
+            case 2:
+                pass
+            
+            case 3:
+                print(main.get_tables())
+                table = input("Select a table name from the above existing ones:\n")
+                num = input("Input number of rows to print (leave empty for all):\n")
+                
+                if num:
+                    num = int(num)
+                else:
+                    num = -1
+                
+                for x in main.read(table, num):
+                    print(x)
+
+            case 4:
+                pass
+
+            case _:
+                flag = False
+
 if __name__ == "__main__":
+    # tes()
     run()
