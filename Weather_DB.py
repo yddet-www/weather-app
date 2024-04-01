@@ -45,7 +45,6 @@ class WeatherDB:
         
         return pk
     
-    # For the sake of the video
     def create_table(self, table):
         dummy_table = (
             f"CREATE TABLE `{table}` ("
@@ -61,7 +60,6 @@ class WeatherDB:
         self.cursor.execute(dummy_table)
         return 1
     
-    # For the sake of cleaning up the mess for the video
     def drop_table(self, table):
         self.cursor.execute(f"DROP TABLE {table}")
         return 1

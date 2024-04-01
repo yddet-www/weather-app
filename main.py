@@ -5,19 +5,20 @@ def run():
     
     ## TESTING LIST COLUMN FUNCTION
     # print(test.get_columns('hourly_forecast'))
-    print(test.get_columns('location'))
+    # print(test.get_columns('location'))
 
+    ## TESTING GET PK
+    # print(test.get_pk("hourly_forecast"))
     
     ## TESTING CREATING AND DROPPING TABLE FUNCTION
     '''
-    debug = test.create_table("test1")
+    test.create_table("test1")
     print(test.get_tables())
     test.drop_table("test1")
     print(test.get_tables())
     '''
     
     ## TESTING INSERT FUNCTION
-    '''
     location_data = [
         ('37.7749', '-122.4194', 'CA', 'San Francisco', '94105', '7th District'),
         ('40.7128', '-74.0060', 'NY', 'New York', '10001', '9th District'),
@@ -34,22 +35,20 @@ def run():
         ('39.7392', '-104.9903', 'CO', 'Denver', '80201', '2nd District'),
         ('33.7490', '-84.3880', 'GA', 'Atlanta', '30301', '5th District'),
         ('45.5051', '-122.6750', 'OR', 'Portland', '97201', '3rd District')]
-    '''
     
     # print(test.insert("location", [('10.0000', '10.0000', 'BT', 'Bumi Serpong Damai', '15321', 'Taman Jajan')]))
-    
-    ## TESTING GET PK
-    # print(test.get_pk("location"))
 
     ## TESTING UPDATE
-    # print(test.update("location", ('10.0000', '10.0000'), ("county", "Depok")))
+    # print(test.update("location", ('10.0000', '10.0000'), ("district", "BADCDSAD")))
     
     ## TESTING DELETE
-    print(test.delete("location", ('10.0000', '10.0000')))
+    # print(test.delete("location", ('10.0000', '10.0000')))
     
     ## TESTING READ FUNCTION
+    '''
     for x in test.read("location"):
         print(x)
+    '''
     
     test.close()
 
