@@ -2,6 +2,13 @@ import mysql.connector
 from datetime import date, datetime, time
 from mysql.connector import errorcode
 
+#- 
+# Note to editor:
+# currently, this class is expected to be used to edit all tables
+# might wanna pivot into making child classes for each table for better error handling
+# as well as better functionality with specific commands for each table
+# -#
+
 class WeatherDB:
     def __init__(self):
         self.connection = mysql.connector.connect(
