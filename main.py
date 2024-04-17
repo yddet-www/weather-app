@@ -1,6 +1,7 @@
 from Weather_DB import *
+from weather_gov import *
 
-def tes():
+def tes1():
     test = WeatherDB()
     
     ## TESTING LIST COLUMN FUNCTION
@@ -128,7 +129,14 @@ Choose option:
             case _:
                 main.close()
                 flag = False
+                
+def tes2():
+    # print(get_point(41.8356, -87.6308))
+    print(get_state(41.8356, -87.6308))
+    print(get_city(41.8356, -87.6308))
+    print(get_county(41.8356, -87.6308))
+    print(get_countyID(41.8356, -87.6308))
 
 if __name__ == "__main__":
-    # tes()
-    run()
+    tes2()
+    # run()
