@@ -131,18 +131,13 @@ Choose option:
                 flag = False
                 
 def tes2():
-    # print(get_point(41.8356, -87.6308))
-    # print(get_state(41.8356, -87.6308))
-    # print(get_city(41.8356, -87.6308))
-    # print(get_county(41.8356, -87.6308))
-    # print(get_countyID(41.8356, -87.6308))
+    # print(get_alertDetails(get_StateAlertsID(39.9814515,-83.58167)[0]))
+    # print(get_alertDetails("urn:oid:2.49.0.1.840.0.c72b9c45dea081f7919f4a321d01c2973796f1b4.001.1")["desc"])
     
-    # print(get_state(47.313158,-122.1834455))
-    # print(get_city(47.313158,-122.1834455))
-    # print(get_county(47.313158,-122.1834455))
-    # print(get_countyID(47.313158,-122.1834455))
-    
-    get_active_alerts(47.313158,-122.1834455)
+    print(get_zoneAlertID("OHC003"))
+    print(get_zoneAlertID("ILC031"))
+  
+    pass
 
 if __name__ == "__main__":
     tes2()
