@@ -132,10 +132,17 @@ Choose option:
                 
 def tes2():
     # print(get_point(41.8356, -87.6308))
-    print(get_state(41.8356, -87.6308))
-    print(get_city(41.8356, -87.6308))
-    print(get_county(41.8356, -87.6308))
-    print(get_countyID(41.8356, -87.6308))
+    # print(get_state(41.8356, -87.6308))
+    # print(get_city(41.8356, -87.6308))
+    # print(get_county(41.8356, -87.6308))
+    # print(get_countyID(41.8356, -87.6308))
+    
+    # print(get_state(47.313158,-122.1834455))
+    # print(get_city(47.313158,-122.1834455))
+    # print(get_county(47.313158,-122.1834455))
+    # print(get_countyID(47.313158,-122.1834455))
+    
+    get_active_alerts(47.313158,-122.1834455)
 
 if __name__ == "__main__":
     tes2()
