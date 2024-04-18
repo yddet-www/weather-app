@@ -1,6 +1,6 @@
 import requests
 
-# Given latitude and longitude decimal values, return JSON response
+# given latitude and longitude decimal values, return JSON response
 def get_point(lat, lon):
     response = requests.get(f"https://api.weather.gov/points/{lat},{lon}")
     
@@ -11,7 +11,17 @@ def get_point(lat, lon):
     return 0 # returns 0 if API call fails
 
 
-# Return state (2 characters)
+# return tuple of grid location as per NWS (x, y)
+def get_grid(lat, lon):
+    response = get_point(lat, lon)
+    
+    if(response):
+        return (response["properties"]["gridX"], response["properties"]["gridY"])
+    
+    return 0
+    
+
+# return state (2 characters)
 def get_state(lat, lon):
     response = get_point(lat, lon)
     
@@ -21,7 +31,7 @@ def get_state(lat, lon):
     return 0
 
 
-# Return county (string)
+# return county (string)
 def get_county(lat, lon):
     response = get_point(lat, lon)
     
@@ -32,7 +42,7 @@ def get_county(lat, lon):
     return 0
 
 
-# Return county ID as per NWS
+# return county ID as per NWS
 def get_countyID(lat, lon):
     response = get_point(lat, lon)
     
@@ -43,7 +53,7 @@ def get_countyID(lat, lon):
     return 0
 
 
-# Return city (string)
+# return city (string)
 def get_city(lat, lon):
     response = get_point(lat, lon)
     
