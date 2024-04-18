@@ -91,6 +91,7 @@ def tes2():
     # print(get_zoneAlertID("ILC031"))
     
     print(get_grid(41.8356,-87.6308))
+    print(get_countyID(41.8356,-87.6308))
   
     # latlon = get_latlon(search_geocode("Cunningham Hall Bronzeville")[0])
     # print(latlon)
