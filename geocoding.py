@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 api_key = os.getenv("API_KEY") # get your own key bruh
 
+
 # return dictionaries of location data from a given address (its kinda like a google search)
 def search_geocode(address):
     params = {
