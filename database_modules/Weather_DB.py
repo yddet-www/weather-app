@@ -1,24 +1,17 @@
-import mysql.connector
+from DBConnection import *
 from datetime import date, datetime, time
 from mysql.connector import errorcode
 
-#- 
+# ###########################################################################################
 # Note to editor:
 # currently, this class is expected to be used to edit all tables
 # might wanna pivot into making parent classes for each table for better error handling
 # as well as better functionality with specific commands for each table
-# -#
+# ###########################################################################################
 
 class WeatherDB:
     def __init__(self):
-        self.connection = mysql.connector.connect(
-            host = "127.0.0.1", 
-            user = "root", 
-            password = "admin1234", 
-            database = "weather-gov",
-            charset= "utf8"
-        )
-        
+        self.connection = get_connection()
         self.cursor = self.connection.cursor()
     
     # Return a list of tables in database
@@ -51,25 +44,6 @@ class WeatherDB:
             pk = pk + key
         
         return pk
-    
-    def create_table(self, table):
-        dummy_table = (
-            f"CREATE TABLE `{table}` ("
-            "`row_no` int(11) NOT NULL,"
-            "`birth_date` date NOT NULL,"
-            "`first_name` varchar(14) NOT NULL,"
-            "`last_name` varchar(16) NOT NULL,"
-            "`gender` enum('M','F') NOT NULL,"
-            "`graduation_date` date NOT NULL,"
-            "PRIMARY KEY (`row_no`))"
-        )
-        
-        self.cursor.execute(dummy_table)
-        return 1
-    
-    def drop_table(self, table):
-        self.cursor.execute(f"DROP TABLE {table}")
-        return 1
     
     # Insert data(s) into target table
     def insert(self, table, data):
@@ -143,3 +117,4 @@ class WeatherDB:
         if self.connection:
             print("Closing connection...")
             self.connection.close()
+            

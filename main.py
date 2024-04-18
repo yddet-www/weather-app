@@ -1,4 +1,4 @@
-from Weather_DB import *
+from database_modules.Weather_DB import *
 from weather_gov import *
 from geocoding import *
 import tkinter as tk
