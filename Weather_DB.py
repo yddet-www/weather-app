@@ -5,7 +5,7 @@ from mysql.connector import errorcode
 #- 
 # Note to editor:
 # currently, this class is expected to be used to edit all tables
-# might wanna pivot into making child classes for each table for better error handling
+# might wanna pivot into making parent classes for each table for better error handling
 # as well as better functionality with specific commands for each table
 # -#
 
