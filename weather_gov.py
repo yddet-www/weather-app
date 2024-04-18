@@ -1,6 +1,4 @@
 import requests
-import json
-
 
 # Given latitude and longitude decimal values, return JSON response
 def get_point(lat, lon):
