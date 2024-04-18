@@ -1,57 +1,10 @@
 from Weather_DB import *
 from weather_gov import *
+from geocoding import *
+import tkinter as tk
 
 def tes1():
     test = WeatherDB()
-    
-    ## TESTING LIST COLUMN FUNCTION
-    # print(test.get_columns('hourly_forecast'))
-    # print(test.get_columns('location'))
-
-    ## TESTING GET PK
-    # print(test.get_pk("hourly_forecast"))
-    
-    ## TESTING CREATING AND DROPPING TABLE FUNCTION
-    '''
-    test.create_table("test1")
-    print(test.get_tables())
-    test.drop_table("test1")
-    print(test.get_tables())
-    '''
-    
-    ## TESTING INSERT FUNCTION
-    '''
-    location_data = [
-        ('37.7749', '-122.4194', 'CA', 'San Francisco', '94105', '7th District'),
-        ('40.7128', '-74.0060', 'NY', 'New York', '10001', '9th District'),
-        ('34.0522', '-118.2437', 'CA', 'Los Angeles', '90001', '12th District'),
-        ('41.8781', '-87.6298', 'IL', 'Chicago', '60601', '3rd District'),
-        ('29.7604', '-95.3698', 'TX', 'Houston', '77001', '18th District'),
-        ('33.4484', '-112.0740', 'AZ', 'Phoenix', '85001', '5th District'),
-        ('39.9526', '-75.1652', 'PA', 'Philadelphia', '19101', '1st District'),
-        ('32.7767', '-96.7970', 'TX', 'Dallas', '75201', '30th District'),
-        ('37.3382', '-121.8863', 'CA', 'San Jose', '95101', '15th District'),
-        ('47.6062', '-122.3321', 'WA', 'Seattle', '98101', '7th District'),
-        ('42.3601', '-71.0589', 'MA', 'Boston', '02101', '4th District'),
-        ('25.7617', '-80.1918', 'FL', 'Miami', '33101', '27th District'),
-        ('39.7392', '-104.9903', 'CO', 'Denver', '80201', '2nd District'),
-        ('33.7490', '-84.3880', 'GA', 'Atlanta', '30301', '5th District'),
-        ('45.5051', '-122.6750', 'OR', 'Portland', '97201', '3rd District')]
-    '''
-    
-    # print(test.insert("location", [('10.0000', '10.0000', 'BT', 'Bumi Serpong Damai', '15321', 'Taman Jajan')]))
-
-    ## TESTING UPDATE
-    # print(test.update("location", ('10.0000', '10.0000'), ("district", "BADCDSAD")))
-    
-    ## TESTING DELETE
-    # print(test.delete("location", ('10.0000', '10.0000')))
-    
-    ## TESTING READ FUNCTION
-    '''
-    for x in test.read("location"):
-        print(x)
-    '''
     
     test.close()
 
@@ -134,9 +87,12 @@ def tes2():
     # print(get_alertDetails(get_StateAlertsID(39.9814515,-83.58167)[0]))
     # print(get_alertDetails("urn:oid:2.49.0.1.840.0.c72b9c45dea081f7919f4a321d01c2973796f1b4.001.1")["desc"])
     
-    print(get_zoneAlertID("OHC003"))
-    print(get_zoneAlertID("ILC031"))
+    # print(get_zoneAlertID("OHC003"))
+    # print(get_zoneAlertID("ILC031"))
   
+    latlon = get_latlon(search_geocode("Cunningham Hall Bronzeville")[0])
+    print(latlon)
+    
     pass
 
 if __name__ == "__main__":
