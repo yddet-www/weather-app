@@ -4,7 +4,7 @@ class LocationHandler:
     
     
     # get list of datas from target column
-    def read_column_location(self, column, limit =- 1):
+    def read_column_location(self, column, limit = -1):
         enum = ["lat", "lon", "state", "county", "city", "countyID", "gridX", "gridY"] # the only acceptable args
         
         # error check
@@ -74,6 +74,26 @@ class LocationHandler:
         return result
     
     
+    # return a row from given lat and lon values
+    def read_row_location(self, lat, lon):
+        connection = get_connection()
+        cursor = connection.cursor()
+        
+        stmt = (
+            "SELECT * FROM location "
+            f"WHERE lat = {lat} and lon = {lon} "
+        )
+        
+            
+        cursor.execute(stmt)
+        result = cursor.fetchall()
+        
+        connection.close()
+        cursor.close()
+        
+        return result
+    
+    
     # insert a row into location table in database
     def insert_location(self, lat, lon, state, county, city, countyID, gridX, gridY):
         stmt = (
@@ -117,4 +137,4 @@ class LocationHandler:
 # ###############
 
 handler = LocationHandler()
-print(handler.delete_location(78, -43))
+print(handler.read_row_location(41.878100, -87.629800))
