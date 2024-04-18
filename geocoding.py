@@ -28,6 +28,7 @@ def search_geocode(address):
     
     return locations
 
+
 # return tuple of lat and lon from given location dictionary
 def get_latlon(location):
     return (location["lat"], location["lon"])
