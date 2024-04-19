@@ -14,7 +14,14 @@ from UserAccount import UserAccountHandler
 # as well as better functionality with specific commands for each table
 # ###########################################################################################
 
-class WeatherDB(LocationHandler, ):
+class WeatherDB(
+    LocationHandler, 
+    WeatherAlertHandler, 
+    LocationAlertHandler, 
+    HourlyForecastHandler, 
+    PastForecastHandler, 
+    DailyForecastHandler, 
+    UserAccountHandler):
     
     
     # Return a list of tables in database
@@ -68,5 +75,7 @@ class WeatherDB(LocationHandler, ):
 # TESTING AREA
 # ###############
 
-db = WeatherDB()
-print(db.get_tables())
+
+# db = WeatherDB()
+# print(db.get_tables())
+# print(db.read_row_location(41.878100, -87.629800))

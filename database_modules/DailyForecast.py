@@ -145,8 +145,8 @@ class DailyForecastHandler():
 # ###############
 
 
-handler = DailyForecastHandler()
+# handler = DailyForecastHandler()
 # print(handler.read_column_dailyForecast("gridX"))
 # print(handler.read_pk_dailyForecast())
-print(handler.insert_dailyForecast(5, 30, "2024-04-18T20:00:00", "Tonight", 46, 89, 86, "5 to 10 mph", "A chance of rain showers after noon. Cloudy. High near 54, with temperatures falling to around 52 in the afternoon. Northeast wind 5 to 10 mph, with gusts as high as 20 mph. Chance of precipitation is 40%. New rainfall amounts less than a tenth of an inch possible."))
+# print(handler.insert_dailyForecast(5, 30, "2024-04-18T20:00:00", "Tonight", 46, 89, 86, "5 to 10 mph", "A chance of rain showers after noon. Cloudy. High near 54, with temperatures falling to around 52 in the afternoon. Northeast wind 5 to 10 mph, with gusts as high as 20 mph. Chance of precipitation is 40%. New rainfall amounts less than a tenth of an inch possible."))
 # print(handler.delete_dailyForecast(5, 30, "2024-04-18T20:00:00"))

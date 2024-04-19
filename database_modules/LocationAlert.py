@@ -141,7 +141,7 @@ class LocationAlertHandler:
 # ###############
 
 
-handler = LocationAlertHandler()
+# handler = LocationAlertHandler()
 # print(handler.insert_locationAlert(41.878100, -87.629800,"urn:oid:2.49.0.1.840.0.c72b9c45dea081f7919f4a321d01c2973796f1b4.001.1"))
 # print(handler.read_rowByID_locationAlert("urn:oid:2.49.0.1.840.0.c72b9c45dea081f7919f4a321d01c2973796f1b4.001.1"))
 # print(handler.read_rowByLatLon_locationAlert(41.878100, -87.629800))

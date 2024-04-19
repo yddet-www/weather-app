@@ -136,5 +136,5 @@ class LocationHandler:
 # TESTING AREA
 # ###############
 
-handler = LocationHandler()
-print(handler.read_row_location(41.878100, -87.629800))
+# handler = LocationHandler()
+# print(handler.read_row_location(41.878100, -87.629800))

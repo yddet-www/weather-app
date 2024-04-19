@@ -144,14 +144,14 @@ class WeatherAlertHandler():
 # ###############
 
 
-sample_alert = ("urn:oid:2.49.0.1.840.0.c72b9c45dea081f7919f4a321d01c2973796f1b4.001.1", 
-                "Severe Thunderstorm Warning", 
-                "2024-04-17T13:59:00", 
-                "2024-04-17T14:30:00", 
-                "At 158 PM EDT, severe thunderstorms were located along a line\nextending from 6 miles east of Paulding to near Continental to near\nDelphos to near Spencerville In Allen County, moving east at 35 mph.\n\nHAZARD...60 mph wind gusts and quarter size hail.\n\nSOURCE...Radar indicated.\n\nIMPACT...Hail damage to vehicles is expected. Expect wind damage to\nroofs, siding, and trees.\n\nLocations impacted include...\nLima, Delphos, Ottawa, Spencerville, Columbus Grove, Leipsic, Elida,\nKalida, Continental, Holgate, Glandorf, Ottoville, Spencerville In\nAllen County, Middle Point, Cairo, Fort Jennings, Grover Hill,\nDupont, Melrose, and Florida.", 
-                "A Tornado Watch remains in effect until 700 PM EDT for northwestern\nand west central Ohio.\n\nRemain alert for a possible tornado! Tornadoes can develop quickly\nfrom severe thunderstorms. If you spot a tornado go at once into the\nbasement or small central room in a sturdy structure.\n\nFor your protection move to an interior room on the lowest floor of a\nbuilding.\n\nTorrential rainfall is occurring with these storms, and may lead to\nflash flooding. Do not drive your vehicle through flooded roadways.")
+# sample_alert = ("urn:oid:2.49.0.1.840.0.c72b9c45dea081f7919f4a321d01c2973796f1b4.001.1", 
+#                 "Severe Thunderstorm Warning", 
+#                 "2024-04-17T13:59:00", 
+#                 "2024-04-17T14:30:00", 
+#                 "At 158 PM EDT, severe thunderstorms were located along a line\nextending from 6 miles east of Paulding to near Continental to near\nDelphos to near Spencerville In Allen County, moving east at 35 mph.\n\nHAZARD...60 mph wind gusts and quarter size hail.\n\nSOURCE...Radar indicated.\n\nIMPACT...Hail damage to vehicles is expected. Expect wind damage to\nroofs, siding, and trees.\n\nLocations impacted include...\nLima, Delphos, Ottawa, Spencerville, Columbus Grove, Leipsic, Elida,\nKalida, Continental, Holgate, Glandorf, Ottoville, Spencerville In\nAllen County, Middle Point, Cairo, Fort Jennings, Grover Hill,\nDupont, Melrose, and Florida.", 
+#                 "A Tornado Watch remains in effect until 700 PM EDT for northwestern\nand west central Ohio.\n\nRemain alert for a possible tornado! Tornadoes can develop quickly\nfrom severe thunderstorms. If you spot a tornado go at once into the\nbasement or small central room in a sturdy structure.\n\nFor your protection move to an interior room on the lowest floor of a\nbuilding.\n\nTorrential rainfall is occurring with these storms, and may lead to\nflash flooding. Do not drive your vehicle through flooded roadways.")
 
-handler = WeatherAlertHandler()
+# handler = WeatherAlertHandler()
 # print(handler.read_pk_weatherAlert())
 # print(handler.read_column_weatherAlert("descript")[0][0])
 # print(handler.insert_weatherAlert(
@@ -161,4 +161,4 @@ handler = WeatherAlertHandler()
 #     sample_alert[3], 
 #     sample_alert[4], 
 #     sample_alert[5]))
-print(handler.delete_weatherAlert("urn:oid:2.49.0.1.840.0.c72b9c45dea081f7919f4a321d01c2973796f1b4.001.1"))
+# print(handler.delete_weatherAlert("urn:oid:2.49.0.1.840.0.c72b9c45dea081f7919f4a321d01c2973796f1b4.001.1"))

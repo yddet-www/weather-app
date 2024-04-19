@@ -144,8 +144,8 @@ class HourlyForecastHandler():
 # ###############
 
 
-handler = HourlyForecastHandler()
+# handler = HourlyForecastHandler()
 # print(handler.read_column_hourlyForecast("gridX"))
 # print(handler.read_pk_hourlyForecast())
 # print(handler.insert_hourlyForecast(5, 30, "2024-04-18T20:00:00", 46, 89, 86, 15, "Rain Showers"))
-print(handler.delete_hourlyForecast(5, 30, "2024-04-18T20:00:00"))
+# print(handler.delete_hourlyForecast(5, 30, "2024-04-18T20:00:00"))

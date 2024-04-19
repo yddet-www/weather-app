@@ -132,6 +132,6 @@ class UserAccountHandler:
 # TESTING AREA
 # ###############
 
-handler = UserAccountHandler()
-print(handler.insert_userAccount("dummychang123", 41.878100, -87.629800))
-print(handler.delete_userAccount("dummychang123"))
+# handler = UserAccountHandler()
+# print(handler.insert_userAccount("dummychang123", 41.878100, -87.629800))
+# print(handler.delete_userAccount("dummychang123"))
