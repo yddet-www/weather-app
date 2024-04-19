@@ -1,4 +1,5 @@
 import mysql.connector.pooling
+from mysql.connector import errorcode
 
 # Create a connection pool
 _connection_pool = mysql.connector.pooling.MySQLConnectionPool(

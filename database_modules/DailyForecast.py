@@ -1,11 +1,11 @@
 from DBConnection import *
 from datetime import datetime
 
-class PastForecastHandler():
+class DailyForecastHandler():
     
     
-    def read_column_pastForecast(self, column, limit = -1):
-        enum = ["gridX", "gridY", "startTime", "temp_f", "precipitate", "humidity", "wind_mph", "shortForecast"] # the only acceptable args
+    def read_column_dailyForecast(self, column, limit = -1):
+        enum = ["gridX", "gridY", "startTime", "title", "temp_f", "precipitate", "humidity", "windspeed", "detailedForecast"] # the only acceptable args
         
         # error check
         if not (column in enum):
@@ -14,7 +14,7 @@ class PastForecastHandler():
         connection = get_connection()
         cursor = connection.cursor()
         
-        stmt = f"SELECT {column} FROM past_forecast"
+        stmt = f"SELECT {column} FROM daily_forecast"
         
         if (limit != -1):
             stmt = stmt + f" LIMIT {limit}"
@@ -28,12 +28,12 @@ class PastForecastHandler():
         return result
     
     
-    def read_pastForecast(self, limit = -1):
+    def read_dailyForecast(self, limit = -1):
         connection = get_connection()
         cursor = connection.cursor()
         
         stmt = (
-            "SELECT * FROM past_forecast "
+            "SELECT * FROM daily_forecast "
             "ORDER BY gridX, gridY, startTime DESC "
         )
         
@@ -49,14 +49,14 @@ class PastForecastHandler():
         return result
     
     
-    def read_pk_pastForecast(self):
+    def read_pk_dailyForecast(self):
         connection = get_connection()
         cursor = connection.cursor()
         
         stmt = (
             "SELECT COLUMN_NAME "
             "FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE "
-            "WHERE TABLE_NAME = 'past_forecast' AND CONSTRAINT_NAME = 'PRIMARY';"
+            "WHERE TABLE_NAME = 'daily_forecast' AND CONSTRAINT_NAME = 'PRIMARY';"
         )
         
         cursor.execute(stmt)
@@ -72,14 +72,14 @@ class PastForecastHandler():
         return pk
     
     
-    def read_row_pastForecast(self, gridX, gridY, startTime):
+    def read_row_dailyForecast(self, gridX, gridY, startTime):
         connection = get_connection()
         cursor = connection.cursor()
         
         startTimeF = datetime.strptime(startTime, '%Y-%m-%dT%H:%M:%S').strftime('%Y-%m-%d %H:%M:%S')
         
         stmt = (
-            "SELECT * FROM past_forecast "
+            "SELECT * FROM daily_forecast "
             f"WHERE gridX = {gridX} AND gridY = {gridY} AND startTime = '{startTimeF}'"
         )
         
@@ -92,10 +92,10 @@ class PastForecastHandler():
         return result
     
     
-    def insert_pastForecast(self, gridX, gridY, startTime, temp_f, precipitate, humidity, wind_mph, shortForecast):
+    def insert_dailyForecast(self, gridX, gridY, startTime, title, temp_f, precipitate, humidity, windspeed, detailedForecast):
         stmt = (
-            "INSERT INTO past_forecast (gridX, gridY, startTime, temp_f, precipitate, humidity, wind_mph, shortForecast) "
-            "VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+            "INSERT INTO daily_forecast (gridX, gridY, startTime, title, temp_f, precipitate, humidity, windspeed, detailedForecast) "
+            "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
         )
         
         startTimeF = datetime.strptime(startTime, '%Y-%m-%dT%H:%M:%S').strftime('%Y-%m-%d %H:%M:%S')
@@ -104,11 +104,12 @@ class PastForecastHandler():
             gridX, 
             gridY, 
             startTimeF, 
+            title,
             temp_f, 
             precipitate, 
             humidity, 
-            wind_mph, 
-            shortForecast)
+            windspeed, 
+            detailedForecast)
         
         connection = get_connection()
         cursor = connection.cursor()
@@ -122,10 +123,10 @@ class PastForecastHandler():
         return 1
     
     
-    def delete_pastForecast(self, gridX, gridY, startTime):
+    def delete_dailyForecast(self, gridX, gridY, startTime):
         startTimeF = datetime.strptime(startTime, '%Y-%m-%dT%H:%M:%S').strftime('%Y-%m-%d %H:%M:%S')
         
-        stmt = f"DELETE FROM past_forecast WHERE gridX = {gridX} AND gridY = {gridY} AND startTime = '{startTimeF}'"
+        stmt = f"DELETE FROM daily_forecast WHERE gridX = {gridX} AND gridY = {gridY} AND startTime = '{startTimeF}'"
 
         connection = get_connection()
         cursor = connection.cursor()
@@ -144,8 +145,8 @@ class PastForecastHandler():
 # ###############
 
 
-handler = PastForecastHandler()
-# print(handler.read_column_pastForecast("gridX"))
-# print(handler.read_pk_pastForecast())
-# print(handler.insert_pastForecast(5, 30, "2024-04-18T20:00:00", 46, 89, 86, 15, "Rain Showers"))
-# print(handler.delete_pastForecast(5, 30, "2024-04-18T20:00:00"))
+handler = DailyForecastHandler()
+# print(handler.read_column_dailyForecast("gridX"))
+# print(handler.read_pk_dailyForecast())
+print(handler.insert_dailyForecast(5, 30, "2024-04-18T20:00:00", "Tonight", 46, 89, 86, "5 to 10 mph", "A chance of rain showers after noon. Cloudy. High near 54, with temperatures falling to around 52 in the afternoon. Northeast wind 5 to 10 mph, with gusts as high as 20 mph. Chance of precipitation is 40%. New rainfall amounts less than a tenth of an inch possible."))
+# print(handler.delete_dailyForecast(5, 30, "2024-04-18T20:00:00"))
