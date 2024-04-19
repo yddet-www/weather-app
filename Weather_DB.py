@@ -69,3 +69,11 @@ class WeatherDB(
         self.cursor.execute(stmt)
         
         return 1
+    
+    
+# ###############
+# TESTING AREA
+# ###############
+
+# handler = WeatherDB()
+# print(handler.read_locationAlert())

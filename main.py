@@ -1,14 +1,10 @@
-from database_modules.Weather_DB import *
+from Weather_DB import *
 from weather_gov import *
 from geocoding import *
 import tkinter as tk
 
-def tes1():
-    test = WeatherDB()
-    
-    test.close()
 
-def run():
+def run_console():
     main = WeatherDB()
     flag = True
 
@@ -90,14 +86,21 @@ def tes2():
     # print(get_zoneAlertID("OHC003"))
     # print(get_zoneAlertID("ILC031"))
     
-    print(get_grid(41.8356,-87.6308))
-    print(get_countyID(41.8356,-87.6308))
+    db = WeatherDB()
+    print(db.read_location())
+    
+    # print(get_grid(41.8356,-87.6308))
+    # print(get_countyID(41.8356,-87.6308))
   
     # latlon = get_latlon(search_geocode("Cunningham Hall Bronzeville")[0])
     # print(latlon)
     
     pass
 
+def run():
+    pass
+
 if __name__ == "__main__":
-    tes2()
-    # run()
+    run()
+    # tes2()
+    # run_console()
