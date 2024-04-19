@@ -69,13 +69,3 @@ class WeatherDB(
         self.cursor.execute(stmt)
         
         return 1
-            
-            
-# ###############
-# TESTING AREA
-# ###############
-
-
-# db = WeatherDB()
-# print(db.get_tables())
-# print(db.read_row_location(41.878100, -87.629800))
