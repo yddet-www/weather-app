@@ -23,15 +23,16 @@ class WeatherApp(tk.Tk):
         
 class Menu(ttk.Frame):
     def __init__(self, parent):
-        
         super().__init__(parent)
-        self.input_field = ttk.Entry(self)
-        self.input_field.pack()
-                
+        
         self.text1 = ttk.Label(self, text="Insert Username")
         self.text1.pack(expand=True, fill="both")
-                
-        ttk.Button(self, text="Submit", command=self.get_usrname).pack()
+        
+        self.input_field = ttk.Entry(self)
+        self.input_field.pack()
+                    
+        self.submit = ttk.Button(self, text="Submit", command=self.get_usrname)
+        self.submit.pack()
         
     def get_usrname(self):
         usrname = self.input_field.get()
