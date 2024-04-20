@@ -17,6 +17,9 @@ def search_geocode(address):
     response = requests.get("https://geocode.maps.co/search", params=params).json()
     
     locations = []
+    
+    if not response:
+        return None
 
     for location in response:
         loc_dict = {
@@ -24,8 +27,8 @@ def search_geocode(address):
             "lat": location["lat"],
             "lon": location["lon"]
         }
-    
-    locations.append(loc_dict)
+        
+        locations.append(loc_dict)
     
     return locations
 
