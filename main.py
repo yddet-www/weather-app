@@ -39,8 +39,26 @@ class Forecast(ttk.Frame):
         self.text1 = ttk.Label(self, text="THIS IS FORECAST WINDOW")
         self.text1.pack(expand=True, fill="both")
         
-        self.back = ttk.Button(self, text="Change location", command=lambda : (self.pack_forget(), self.master.option.pack()))
+        self.back = ttk.Button(self, text="Back", command=lambda : (self.pack_forget(), self.master.option.pack()))
         self.back.pack(expand=True, fill="both")
+        
+        self.hourly = ttk.Button(self, text="Get hourly forecast", command=self.hourly_forecast)
+        self.hourly.pack(expand=True, fill="both")
+        
+        self.daily = ttk.Button(self, text="Get daily forecast", command=self.daily_forecast)
+        self.daily.pack(expand=True, fill="both")
+        
+        self.past = ttk.Button(self, text="Get past forecast", command= self.past_forecast)
+        self.past.pack(expand=True, fill="both")
+        
+    def hourly_forecast(self):
+        self.text1["text"] = "GETTING HOURLY"
+    
+    def daily_forecast(self):
+        self.text1["text"] = "GETTING DAILY"
+    
+    def past_forecast(self):
+        self.text1["text"] = "GETTING PAST"
         
 class Alert(ttk.Frame):
     def __init__(self, parent):
@@ -51,7 +69,7 @@ class Alert(ttk.Frame):
         self.text1 = ttk.Label(self, text="THIS IS ALERT WINDOW")
         self.text1.pack(expand=True, fill="both")
         
-        self.back = ttk.Button(self, text="Change location", command=lambda : (self.pack_forget(), self.master.option.pack()))
+        self.back = ttk.Button(self, text="Back", command=lambda : (self.pack_forget(), self.master.option.pack()))
         self.back.pack(expand=True, fill="both")
         
 class Option(ttk.Frame):
