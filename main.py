@@ -20,12 +20,57 @@ class WeatherApp(tk.Tk):
         # widgets
         self.menu = Menu(self)
         self.action = Action(self)
+        self.option = Option(self)
+        self.forecast = Forecast(self)
+        self.alert = Alert(self)
         
         # start it off
         self.menu.pack()
         
         # run
         self.mainloop()
+        
+class Forecast(ttk.Frame):
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.create_mainWidgets()
+        
+    def create_mainWidgets(self):
+        self.text1 = ttk.Label(self, text="THIS IS FORECAST WINDOW")
+        self.text1.pack(expand=True, fill="both")
+        
+        self.back = ttk.Button(self, text="Change location", command=lambda : (self.pack_forget(), self.master.option.pack()))
+        self.back.pack(expand=True, fill="both")
+        
+class Alert(ttk.Frame):
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.create_mainWidgets()
+        
+    def create_mainWidgets(self):
+        self.text1 = ttk.Label(self, text="THIS IS ALERT WINDOW")
+        self.text1.pack(expand=True, fill="both")
+        
+        self.back = ttk.Button(self, text="Change location", command=lambda : (self.pack_forget(), self.master.option.pack()))
+        self.back.pack(expand=True, fill="both")
+        
+class Option(ttk.Frame):
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.create_mainWidgets()
+        
+    def create_mainWidgets(self):
+        self.text1 = ttk.Label(self, text="THIS IS OPTION WINDOW")
+        self.text1.pack(expand=True, fill="both")
+        
+        self.back = ttk.Button(self, text="Change location", command=lambda : (self.pack_forget(), self.master.action.pack()))
+        self.back.pack(expand=True, fill="both")
+        
+        self.forecast = ttk.Button(self, text="Get forecast", command=lambda : (self.pack_forget(), self.master.forecast.pack()))
+        self.forecast.pack(expand=True, fill="both")
+ 
+        self.alert = ttk.Button(self, text="Check for alerts", command=lambda : (self.pack_forget(), self.master.alert.pack()))
+        self.alert.pack(expand=True, fill="both")
         
 class Action(ttk.Frame):
     def __init__(self, parent):
@@ -42,11 +87,10 @@ class Action(ttk.Frame):
         self.other_address = ttk.Button(self, text="Use different address", command=self.other_next)
         self.other_address.pack(expand=True, fill="both")
         
-    def user_next(self):
-        print(self.master.lat)
-        print(self.master.lon)
-        
+    def user_next(self):   
         self.pack_forget()
+        self.master.option.pack()
+
         
     def other_next(self):
         self.user_address.pack_forget()
@@ -107,10 +151,8 @@ class Action(ttk.Frame):
         self.master.lat = lat
         self.master.lon = lon
         
-        print(self.master.lat)
-        print(self.master.lon)
-        
         self.pack_forget()
+        self.master.forecast.pack()
                 
 class Menu(ttk.Frame):
     def __init__(self, parent):
