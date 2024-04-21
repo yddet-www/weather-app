@@ -18,10 +18,29 @@ class WeatherApp(tk.Tk):
         self.minsize(960,540)
         
         # widgets
-        self.menu = Menu(self).pack()
+        self.menu = Menu(self)
+        self.action = Action(self)
+        
+        # start it off
+        self.menu.pack()
         
         # run
-        self.mainloop()        
+        self.mainloop()
+        
+class Action(ttk.Frame):
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.create_mainWidgets()
+        
+    def create_mainWidgets(self):
+        self.text1 = ttk.Label(self, text="Choose an option")
+        self.text1.pack(expand=True, fill="both")
+        
+        self.user_address = ttk.Button(self, text="Use account address")
+        self.user_address.pack(expand=True, fill="both")
+        
+        self.other_address = ttk.Button(self, text="Use different address")
+        self.other_address.pack(expand=True, fill="both")
         
 class Menu(ttk.Frame):
     def __init__(self, parent):
@@ -53,7 +72,13 @@ class Menu(ttk.Frame):
         elif self.master.db.read_row_userAccount(self.usrname):
             self.text1["text"] = self.usrname
             
+            acc = self.master.db.read_row_userAccount(self.usrname)[0]
+            
+            self.master.lat = acc[1]
+            self.master.lon = acc[2]
+            
             self.pack_forget()
+            self.master.action.pack()
         else:
             self.text1["text"] = "Username not found! Creating account..."
             self.text2["text"] = "Bind account to an address"
@@ -93,7 +118,12 @@ class Menu(ttk.Frame):
                                        get_grid(lat,lon)[1])
         
         self.master.db.insert_userAccount(self.usrname, lat, lon)
+        
+        self.master.lat = lat
+        self.master.lon = lon
+        
         self.pack_forget()
+        self.master.action.pack()
         
     def clear_addressWidgets(self):
         # Remove all existing buttons
