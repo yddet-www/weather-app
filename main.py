@@ -21,8 +21,8 @@ class WeatherApp(tk.Tk):
         self.menu = Menu(self)
         self.action = Action(self)
         self.option = Option(self)
-        self.forecast = Forecast(self)
-        self.alert = Alert(self)
+        self.forecast = None
+        self.alert = None
         
         # start it off
         self.menu.pack()
@@ -33,7 +33,10 @@ class WeatherApp(tk.Tk):
 class Forecast(ttk.Frame):
     def __init__(self, parent):
         super().__init__(parent)
+        self.gridXY = get_grid(self.master.lat, self.master.lon)
         self.create_mainWidgets()
+        
+        self.forecastWidgets = []
         
     def create_mainWidgets(self):
         self.text1 = ttk.Label(self, text="THIS IS FORECAST WINDOW")
@@ -53,12 +56,142 @@ class Forecast(ttk.Frame):
         
     def hourly_forecast(self):
         self.text1["text"] = "GETTING HOURLY"
-    
+        self.hourly["text"] = "Refresh"
+        self.daily["text"] = "Get daily forecast"
+        self.past["text"] = "Get past forecast"
+        
+        hourly = get_hourlyForecast(self.master.lat, self.master.lon)["properties"]["periods"]
+        
+        self.clear_forecastWidgets()
+                
+        for i in range(12):
+            period = hourly[i]
+            
+            startTime = period["startTime"][:-6]
+            temp_f = period["temperature"]
+            precipitate = period["probabilityOfPrecipitation"]["value"]
+            humidity = period["relativeHumidity"]["value"]
+            wind_mph = int(period["windSpeed"].split()[0])
+            shortForecast = period["shortForecast"]
+            
+            self.master.db.insert_hourlyForecast(self.gridXY[0], 
+                                                 self.gridXY[1], 
+                                                 startTime, 
+                                                 temp_f, 
+                                                 precipitate, 
+                                                 humidity, 
+                                                 wind_mph, 
+                                                 shortForecast)
+            
+            forecasting = (
+                f"{startTime[5:7]}/{startTime[8:10]}, {startTime[11:]}\n"
+                f"temperature: {temp_f}\n"
+                f"precipitation: {precipitate}%\n"
+                f"humidty: {humidity}%\n"
+                f"wind: {wind_mph} mph\n"
+                f"{shortForecast}\n"
+            )
+            
+            label = ttk.Label(self, text=forecasting, background='#FFFFCC', padding=4, width=16)
+            label.pack(side=tk.LEFT, expand=True, fill="both", padx=4, pady=16)
+            
+            self.forecastWidgets.append(label)
+            
+    def clear_forecastWidgets(self):
+        # Remove all existing buttons
+        for label in self.forecastWidgets:
+            label.destroy()
+            
+        self.forecastWidgets = []  # Clear the list of label references
+            
     def daily_forecast(self):
         self.text1["text"] = "GETTING DAILY"
+        self.hourly["text"] = "Get hourly forecast"
+        self.daily["text"] = "Refresh"
+        self.past["text"] = "Get past forecast"
+        
+        daily = get_dailyForecast(self.master.lat, self.master.lon)["properties"]["periods"]
+               
+        self.clear_forecastWidgets()
+        self.master.db.refresh_dailyForecast()
+        
+        for i in range(12):
+            period = daily[i]
+            
+            startTime = period["endTime"][:-6]
+            title = period["name"]
+            temp_f = period["temperature"]
+            precipitate = period["probabilityOfPrecipitation"]["value"]
+            
+            if not precipitate:
+                precipitate = 0
+            
+            humidity = period["relativeHumidity"]["value"]
+            windspeed = period["windSpeed"]
+            detailedForecast = period["detailedForecast"]
+            
+            self.master.db.insert_dailyForecast(self.gridXY[0], 
+                                                self.gridXY[1],
+                                                startTime,
+                                                title,
+                                                temp_f,
+                                                precipitate,
+                                                humidity,
+                                                windspeed,
+                                                detailedForecast)
+            
+            forecasting = (
+                f"{title}\n"
+                f"temperature: {temp_f}\n"
+                f"precipitation: {precipitate}%\n"
+                f"humidty: {humidity}%\n"
+                f"wind: {windspeed}\n"
+                f"\n{detailedForecast}\n"
+            )
+            
+            label = ttk.Label(self, text=forecasting, background='#FFFFCC', padding=4, width=20, wraplength=120)
+            label.pack(side=tk.LEFT, expand=True, fill="both", padx=4, pady=16)
+            
+            self.forecastWidgets.append(label)
     
     def past_forecast(self):
         self.text1["text"] = "GETTING PAST"
+        self.hourly["text"] = "Get hourly forecast"
+        self.daily["text"] = "Get daily forecast"
+        self.past["text"] = "Refresh"
+        
+        past = self.master.db.read_row_pastForecast(self.gridXY[0], self.gridXY[1])
+        
+        self.clear_forecastWidgets()
+        
+        if len(past) > 12:
+            limit = 12
+        else:
+            limit = len(past)
+
+        for i in range(limit):
+            period = past[i]
+            
+            date = period[2].strftime("%Y-%m-%d %H:%M:%S")
+            temp = period[3]
+            precipitate = period[4]
+            humidity = period[5]
+            wind = period[6]
+            shortForecast = period[7]
+            
+            forecasting = (
+                f"{date}\n"
+                f"temperature: {temp}\n"
+                f"precipitation: {precipitate}%\n"
+                f"humidty: {humidity}%\n"
+                f"wind: {wind} mph\n"
+                f"{shortForecast}\n"
+            )
+            
+            label = ttk.Label(self, text=forecasting, background='#FFFFCC', padding=4, width=16)
+            label.pack(side=tk.LEFT, expand=True, fill="both", padx=4, pady=16)
+            
+            self.forecastWidgets.append(label)
         
 class Alert(ttk.Frame):
     def __init__(self, parent):
@@ -84,11 +217,21 @@ class Option(ttk.Frame):
         self.back = ttk.Button(self, text="Change location", command=lambda : (self.pack_forget(), self.master.action.pack()))
         self.back.pack(expand=True, fill="both")
         
-        self.forecast = ttk.Button(self, text="Get forecast", command=lambda : (self.pack_forget(), self.master.forecast.pack()))
+        self.forecast = ttk.Button(self, text="Get forecast", command=self.move_forecast)
         self.forecast.pack(expand=True, fill="both")
  
-        self.alert = ttk.Button(self, text="Check for alerts", command=lambda : (self.pack_forget(), self.master.alert.pack()))
+        self.alert = ttk.Button(self, text="Check for alerts", command=self.move_alert)
         self.alert.pack(expand=True, fill="both")
+        
+    def move_forecast(self):
+        self.master.forecast = Forecast(self.master)
+        self.master.forecast.pack()
+        self.pack_forget()
+        
+    def move_alert(self):
+        self.master.alert = Alert(self.master)
+        self.master.alert.pack()
+        self.pack_forget()
         
 class Action(ttk.Frame):
     def __init__(self, parent):

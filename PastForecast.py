@@ -71,15 +71,14 @@ class PastForecastHandler:
         return pk
     
     
-    def read_row_pastForecast(self, gridX, gridY, startTime):
+    def read_row_pastForecast(self, gridX, gridY):
         connection = get_connection()
         cursor = connection.cursor()
-        
-        startTimeF = datetime.strptime(startTime, '%Y-%m-%dT%H:%M:%S').strftime('%Y-%m-%d %H:%M:%S')
-        
+                
         stmt = (
             "SELECT * FROM past_forecast "
-            f"WHERE gridX = {gridX} AND gridY = {gridY} AND startTime = '{startTimeF}'"
+            f"WHERE gridX = {gridX} AND gridY = {gridY} "
+            "ORDER BY startTime DESC"
         )
         
         cursor.execute(stmt)

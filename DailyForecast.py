@@ -92,10 +92,35 @@ class DailyForecastHandler():
         return result
     
     
+    def refresh_dailyForecast(self):
+        stmt = (
+            "DELETE FROM daily_forecast "
+            "WHERE startTime < NOW(); "
+        )
+    
+        connection = get_connection()
+        cursor = connection.cursor()
+        
+        cursor.execute(stmt)
+        connection.commit()
+        
+        connection.close()
+        cursor.close()
+        
+        return 1
+    
+    
     def insert_dailyForecast(self, gridX, gridY, startTime, title, temp_f, precipitate, humidity, windspeed, detailedForecast):
         stmt = (
             "INSERT INTO daily_forecast (gridX, gridY, startTime, title, temp_f, precipitate, humidity, windspeed, detailedForecast) "
             "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+            "ON DUPLICATE KEY UPDATE "
+            "title = VALUES(title), "
+            "temp_f = VALUES(temp_f), "
+            "precipitate = VALUES(precipitate), "
+            "humidity = VALUES(humidity), "
+            "windspeed = VALUES(windspeed), "
+            "detailedForecast = VALUES(detailedForecast)"
         )
         
         startTimeF = datetime.strptime(startTime, '%Y-%m-%dT%H:%M:%S').strftime('%Y-%m-%d %H:%M:%S')

@@ -96,6 +96,12 @@ class HourlyForecastHandler():
         stmt = (
             "INSERT INTO hourly_forecast (gridX, gridY, startTime, temp_f, precipitate, humidity, wind_mph, shortForecast) "
             "VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+            "ON DUPLICATE KEY UPDATE "
+            "temp_f = VALUES(temp_f), "
+            "precipitate = VALUES(precipitate), "
+            "humidity = VALUES(humidity), "
+            "wind_mph = VALUES(wind_mph), "
+            "shortForecast = VALUES(shortForecast);"
         )
         
         startTimeF = datetime.strptime(startTime, '%Y-%m-%dT%H:%M:%S').strftime('%Y-%m-%d %H:%M:%S')
