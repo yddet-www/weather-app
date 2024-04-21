@@ -36,12 +36,82 @@ class Action(ttk.Frame):
         self.text1 = ttk.Label(self, text="Choose an option")
         self.text1.pack(expand=True, fill="both")
         
-        self.user_address = ttk.Button(self, text="Use account address")
+        self.user_address = ttk.Button(self, text="Use account address", command=self.user_next)
         self.user_address.pack(expand=True, fill="both")
         
-        self.other_address = ttk.Button(self, text="Use different address")
+        self.other_address = ttk.Button(self, text="Use different address", command=self.other_next)
         self.other_address.pack(expand=True, fill="both")
         
+    def user_next(self):
+        print(self.master.lat)
+        print(self.master.lon)
+        
+        self.pack_forget()
+        
+    def other_next(self):
+        self.user_address.pack_forget()
+        self.other_address.pack_forget()
+        
+        self.text1["text"] = "Search an address"
+        
+        self.address_buttons = []
+        
+        self.input = ttk.Entry(self)
+        self.input.pack(ipadx=50)
+        
+        self.submit = ttk.Button(self, text="Submit", command=self.get_address)
+        self.submit.pack()
+        
+    def get_address(self):
+        self.address = self.input.get()
+        
+        result = search_geocode(self.address)
+        
+        self.clear_addressWidgets()
+        
+        if result:      # error check if API call found anything
+            for i in result:
+                if get_point(i["lat"], i["lon"]) != 0:
+                    self.create_addressWidgets(i)   # if search result is within bounds, create button 
+        else:
+            self.text1["text"] = "No address found, use different keywords"
+            
+    def create_addressWidgets(self, address):
+        button = ttk.Button(self, text=address["display_name"], command=lambda addr=address: self.set_address(addr))
+        button.pack()
+        self.address_buttons.append(button)
+        
+    def clear_addressWidgets(self):
+        # Remove all existing buttons
+        for button in self.address_buttons:
+            button.destroy()
+            
+        self.address_buttons = []
+        
+    def set_address(self, address):
+        lat = round(float(address["lat"]), 6)
+        lon = round(float(address["lon"]), 6)
+        
+        check = self.master.db.read_row_location(lat, lon)
+                
+        if not check:
+            self.master.db.insert_location(lat, 
+                                            lon, 
+                                            get_state(lat,lon), 
+                                            get_county(lat,lon), 
+                                            get_city(lat,lon), 
+                                            get_countyID(lat,lon), 
+                                            get_grid(lat,lon)[0], 
+                                            get_grid(lat,lon)[1])
+                
+        self.master.lat = lat
+        self.master.lon = lon
+        
+        print(self.master.lat)
+        print(self.master.lon)
+        
+        self.pack_forget()
+                
 class Menu(ttk.Frame):
     def __init__(self, parent):
         super().__init__(parent)
@@ -95,7 +165,7 @@ class Menu(ttk.Frame):
         if result:      # error check if API call found anything
             for i in result:
                 if get_point(i["lat"], i["lon"]) != 0:
-                    self.create_addressWidgets(i)   # if search result is within bounds, create button                                  
+                    self.create_addressWidgets(i)   # if search result is within bounds, create button 
         else:
             self.text2["text"] = "No address found, use different keywords"
             
@@ -105,17 +175,20 @@ class Menu(ttk.Frame):
         self.address_buttons.append(button)
         
     def set_address(self, address):
-        lat = address["lat"]
-        lon = address["lon"]
+        lat = round(float(address["lat"]), 6)
+        lon = round(float(address["lon"]), 6)
         
-        self.master.db.insert_location(lat, 
-                                       lon, 
-                                       get_state(lat,lon), 
-                                       get_county(lat,lon), 
-                                       get_city(lat,lon), 
-                                       get_countyID(lat,lon), 
-                                       get_grid(lat,lon)[0], 
-                                       get_grid(lat,lon)[1])
+        check = self.master.db.read_row_location(lat, lon)
+                
+        if not check:
+            self.master.db.insert_location(lat, 
+                                            lon, 
+                                            get_state(lat,lon), 
+                                            get_county(lat,lon), 
+                                            get_city(lat,lon), 
+                                            get_countyID(lat,lon), 
+                                            get_grid(lat,lon)[0], 
+                                            get_grid(lat,lon)[1])
         
         self.master.db.insert_userAccount(self.usrname, lat, lon)
         
