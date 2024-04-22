@@ -176,7 +176,7 @@ class Forecast(ttk.Frame):
             
             forecasting = (
                 f"{startTime}\n"
-                f"temperature: {temp_f}\n"
+                f"temperature: {temp_f} F\n"
                 f"precipitate: {precipitate}\n"
                 f"humidity: {humidity}\n"
                 f"wind: {wind_mph}\n"
@@ -185,7 +185,7 @@ class Forecast(ttk.Frame):
             )
             
             label = ttk.Label(self, text=forecasting, background='#FFFFCC', padding=4, wraplength=120)
-            label.pack(side=tk.LEFT, expand=True, fill="both", padx=4, pady=16)
+            label.pack(expand=True, fill="both", padx=4, pady=16)
             
             self.forecastWidgets.append(label)
     
@@ -222,7 +222,7 @@ class Forecast(ttk.Frame):
             
             forecasting = (
                 f"{startTime[5:7]}/{startTime[8:10]}, {startTime[11:]}\n"
-                f"temperature: {temp_f}\n"
+                f"temperature: {temp_f} F\n"
                 f"precipitation: {precipitate}%\n"
                 f"humidty: {humidity}%\n"
                 f"wind: {wind_mph} mph\n"
@@ -281,7 +281,7 @@ class Forecast(ttk.Frame):
             
             forecasting = (
                 f"{title}\n"
-                f"temperature: {temp_f}\n"
+                f"temperature: {temp_f} F\n"
                 f"precipitation: {precipitate}%\n"
                 f"humidty: {humidity}%\n"
                 f"wind: {windspeed}\n"
@@ -322,7 +322,7 @@ class Forecast(ttk.Frame):
             
             forecasting = (
                 f"{date}\n"
-                f"temperature: {temp}\n"
+                f"temperature: {temp} F\n"
                 f"precipitation: {precipitate}%\n"
                 f"humidty: {humidity}%\n"
                 f"wind: {wind} mph\n"
