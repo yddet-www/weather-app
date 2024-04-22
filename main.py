@@ -200,6 +200,7 @@ class Forecast(ttk.Frame):
         hourly = get_hourlyForecast(self.master.lat, self.master.lon)["properties"]["periods"]
         
         self.clear_forecastWidgets()
+        self.master.db.log_hourlyForecast()
                 
         for i in range(12):
             period = hourly[i]

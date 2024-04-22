@@ -128,6 +128,34 @@ class HourlyForecastHandler():
         return 1
     
     
+    def log_hourlyForecast(self):
+        stmt2 = (
+            "INSERT INTO past_forecast "
+            "SELECT * "
+            "FROM hourly_forecast "
+            "WHERE startTime < DATE_SUB(NOW(), INTERVAL 1 HOUR); "
+        )
+        
+        stmt1 = (
+            "DELETE FROM hourly_forecast "
+            "WHERE startTime < DATE_SUB(NOW(), INTERVAL 1 HOUR); "
+        )
+    
+        connection = get_connection()
+        cursor = connection.cursor()
+        
+        cursor.execute(stmt2)
+        connection.commit()
+        
+        cursor.execute(stmt1)
+        connection.commit()
+        
+        connection.close()
+        cursor.close()
+        
+        return 1
+    
+    
     def delete_hourlyForecast(self, gridX, gridY, startTime):
         startTimeF = datetime.strptime(startTime, '%Y-%m-%dT%H:%M:%S').strftime('%Y-%m-%d %H:%M:%S')
         
