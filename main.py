@@ -185,7 +185,7 @@ class Forecast(ttk.Frame):
             )
             
             label = ttk.Label(self, text=forecasting, background='#FFFFCC', padding=4, wraplength=120)
-            label.pack(expand=True, fill="both", padx=4, pady=16)
+            label.pack(side=tk.LEFT, expand=True, fill="both", padx=4, pady=16)
             
             self.forecastWidgets.append(label)
     
