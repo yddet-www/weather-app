@@ -99,11 +99,11 @@ def get_StateAlertsID(state):
     return weather_alerts # note that value may return NULL if no alerts active
 
 
-# return list  of alert IDs in a zone/county ID
-def get_zoneAlertID(zone):
+# return list  of alert IDs in a point
+def get_pointAlertID(lat,lon):
     params = {
         "status" : "actual",
-        "zone" : zone
+        "point" : f"{lat},{lon}"
     }
     
     response = requests.get(f"https://api.weather.gov/alerts/active", params=params).json()
@@ -121,7 +121,7 @@ def get_alertDetails(alert_id):
         "onset" : response["properties"]["onset"],
         "ends" : response["properties"]["ends"],
         "desc" : response["properties"]["description"],
-        "instruction" : response["properties"]["instruction"],
+        "instruction" : response["properties"]["instruction"]
     }
     
     return data

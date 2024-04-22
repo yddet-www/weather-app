@@ -30,6 +30,67 @@ class WeatherApp(tk.Tk):
         # run
         self.mainloop()
         
+class Alert(ttk.Frame):
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.create_mainWidgets()
+        
+        self.alertWidgets = []
+        
+    def create_mainWidgets(self):
+        self.text1 = ttk.Label(self, text="Select an alert option")
+        self.text1.pack(expand=True, fill="both")
+        
+        self.back = ttk.Button(self, text="Back", command=lambda : (self.pack_forget(), self.master.option.pack()))
+        self.back.pack(expand=True, fill="both")
+        
+        self.alert = ttk.Button(self, text="Check active alerts", command=self.weather_alerts)
+        self.alert.pack(expand=True, fill="both")
+        
+    def weather_alerts(self):
+        active_alert = get_pointAlertID(self.master.lat, self.master.lon)
+        
+        self.clear_alertWidgets()
+        
+        if active_alert:
+            for i in active_alert:
+                alert_id = i
+                detail = get_alertDetails(i)
+                
+                title = detail["event"]
+                onset = detail["onset"][:-6]
+                ending = detail["ends"][:-6]
+                descript = detail["desc"]
+                instruction = detail["instruction"]
+                
+                self.master.db.refresh_weatherAlert()
+                self.master.db.insert_weatherAlert(alert_id, title, onset, ending, descript, instruction)
+                self.master.db.insert_locationAlert(self.master.lat, self.master.lon, alert_id)
+                
+                alerting = (
+                    f"{title}\n"
+                    f"onset: {onset}\n"
+                    f"end: {ending}\n"
+                    f"\n{descript}\n"
+                    f"\n{instruction}\n"
+                )
+                
+                label = ttk.Label(self, text=alerting, background='#FFFFCC', padding=4)
+                label.pack(side=tk.LEFT, expand=True, fill="both", padx=4, pady=16)
+                
+                self.alertWidgets.append(label)
+        else:
+            label = ttk.Label(self, text="No alerts found, rest easy", background='#FFFFCC', padding=4)
+            label.pack(side=tk.LEFT, expand=True, fill="both", padx=4, pady=16)
+            self.alertWidgets.append(label)
+    
+    def clear_alertWidgets(self):
+        # Remove all existing widgets
+        for widget in self.alertWidgets:
+            widget.destroy()
+            
+        self.alertWidgets = []  # Clear the list of label references
+        
 class Forecast(ttk.Frame):
     def __init__(self, parent):
         super().__init__(parent)
@@ -39,7 +100,12 @@ class Forecast(ttk.Frame):
         self.forecastWidgets = []
         
     def create_mainWidgets(self):
-        self.text1 = ttk.Label(self, text="THIS IS FORECAST WINDOW")
+        curr_loc = self.master.db.read_row_location(self.master.lat, self.master.lon)[0]
+        state = curr_loc[2]
+        county = curr_loc[3]
+        city = curr_loc[4]
+        
+        self.text1 = ttk.Label(self, text=f"Current location: {city}, {county} County {state}")
         self.text1.pack(expand=True, fill="both")
         
         self.back = ttk.Button(self, text="Back", command=lambda : (self.pack_forget(), self.master.option.pack()))
@@ -54,11 +120,82 @@ class Forecast(ttk.Frame):
         self.past = ttk.Button(self, text="Get past forecast", command= self.past_forecast)
         self.past.pack(expand=True, fill="both")
         
+        self.weather_alert_forecast = ttk.Button(self, text="Check forecast of \nalerted areas", command= self.alert_forecast)
+        self.weather_alert_forecast.pack(expand=True, fill="both")
+        
+        self.city_temp = ttk.Button(self, text="Check average temperature \nof registered cities", command= self.avg_cityTemp)
+        self.city_temp.pack(expand=True, fill="both")
+        
+        
+    def avg_cityTemp(self):
+        self.text1["text"] = "Fetching alerted area forecast..."
+        self.hourly["text"] = "Get hourly forecast"
+        self.daily["text"] = "Get daily forecast"
+        self.past["text"] = "Get past forecast"
+        self.weather_alert_forecast["text"] = "Check forecast of \nalerted areas"
+        self.city_temp["text"] = "Refresh"
+        
+        avg = self.master.db.city_avg_temp()
+        
+        self.clear_forecastWidgets()
+        
+        for i in avg:
+            text = (
+                f"{i[1]}, {i[0]} average temperature: {i[2]}"
+            )
+            
+            label = ttk.Label(self, text=text, background='#FFFFCC', padding=4)
+            label.pack(expand=True, fill="both", pady=4)
+            
+            self.forecastWidgets.append(label)
+            
+        
+    def alert_forecast(self):
+        self.text1["text"] = "Fetching alerted area forecast..."
+        self.hourly["text"] = "Get hourly forecast"
+        self.daily["text"] = "Get daily forecast"
+        self.past["text"] = "Get past forecast"
+        self.weather_alert_forecast["text"] = "Refresh"
+        self.city_temp["text"] = "Check average temperature \nof registered cities"
+        
+        alert = self.master.db.alert_forecast()
+        
+        self.clear_forecastWidgets()
+        
+        for i in alert:
+            startTime = i[0]
+            temp_f = i[1]
+            precipitate = i[2]
+            humidity = i[3]
+            wind_mph = i[4]
+            shortForecast = i[5]
+            state = i[6]
+            county = i[7]
+            city = i[8]
+            
+            
+            forecasting = (
+                f"{startTime}\n"
+                f"temperature: {temp_f}\n"
+                f"precipitate: {precipitate}\n"
+                f"humidity: {humidity}\n"
+                f"wind: {wind_mph}\n"
+                f"{shortForecast}\n"
+                f"{city} {county}, {state}"
+            )
+            
+            label = ttk.Label(self, text=forecasting, background='#FFFFCC', padding=4, wraplength=120)
+            label.pack(side=tk.LEFT, expand=True, fill="both", padx=4, pady=16)
+            
+            self.forecastWidgets.append(label)
+    
     def hourly_forecast(self):
-        self.text1["text"] = "GETTING HOURLY"
+        self.text1["text"] = "Fetching hourly forecast..."
         self.hourly["text"] = "Refresh"
         self.daily["text"] = "Get daily forecast"
         self.past["text"] = "Get past forecast"
+        self.weather_alert_forecast["text"] = "Check forecast of \nalerted areas"
+        self.city_temp["text"] = "Check average temperature \nof registered cities"
         
         hourly = get_hourlyForecast(self.master.lat, self.master.lon)["properties"]["periods"]
         
@@ -105,10 +242,12 @@ class Forecast(ttk.Frame):
         self.forecastWidgets = []  # Clear the list of label references
             
     def daily_forecast(self):
-        self.text1["text"] = "GETTING DAILY"
+        self.text1["text"] = "Fetching daily forecast..."
         self.hourly["text"] = "Get hourly forecast"
         self.daily["text"] = "Refresh"
         self.past["text"] = "Get past forecast"
+        self.weather_alert_forecast["text"] = "Check forecast of \nalerted areas"
+        self.city_temp["text"] = "Check average temperature \nof registered cities"
         
         daily = get_dailyForecast(self.master.lat, self.master.lon)["properties"]["periods"]
                
@@ -155,10 +294,12 @@ class Forecast(ttk.Frame):
             self.forecastWidgets.append(label)
     
     def past_forecast(self):
-        self.text1["text"] = "GETTING PAST"
+        self.text1["text"] = "Fetching past forecast..."
         self.hourly["text"] = "Get hourly forecast"
         self.daily["text"] = "Get daily forecast"
         self.past["text"] = "Refresh"
+        self.weather_alert_forecast["text"] = "Check forecast of \nalerted areas"
+        self.city_temp["text"] = "Check average temperature \nof registered cities"
         
         past = self.master.db.read_row_pastForecast(self.gridXY[0], self.gridXY[1])
         
@@ -188,22 +329,10 @@ class Forecast(ttk.Frame):
                 f"{shortForecast}\n"
             )
             
-            label = ttk.Label(self, text=forecasting, background='#FFFFCC', padding=4, width=16)
+            label = ttk.Label(self, text=forecasting, background='#FFFFCC', padding=4, width=18)
             label.pack(side=tk.LEFT, expand=True, fill="both", padx=4, pady=16)
             
             self.forecastWidgets.append(label)
-        
-class Alert(ttk.Frame):
-    def __init__(self, parent):
-        super().__init__(parent)
-        self.create_mainWidgets()
-        
-    def create_mainWidgets(self):
-        self.text1 = ttk.Label(self, text="THIS IS ALERT WINDOW")
-        self.text1.pack(expand=True, fill="both")
-        
-        self.back = ttk.Button(self, text="Back", command=lambda : (self.pack_forget(), self.master.option.pack()))
-        self.back.pack(expand=True, fill="both")
         
 class Option(ttk.Frame):
     def __init__(self, parent):
@@ -211,7 +340,7 @@ class Option(ttk.Frame):
         self.create_mainWidgets()
         
     def create_mainWidgets(self):
-        self.text1 = ttk.Label(self, text="THIS IS OPTION WINDOW")
+        self.text1 = ttk.Label(self, text="Choose the following options")
         self.text1.pack(expand=True, fill="both")
         
         self.back = ttk.Button(self, text="Change location", command=lambda : (self.pack_forget(), self.master.action.pack()))
@@ -313,6 +442,7 @@ class Action(ttk.Frame):
         self.master.lon = lon
         
         self.pack_forget()
+        self.master.forecast = Option(self.master)
         self.master.forecast.pack()
                 
 class Menu(ttk.Frame):
@@ -323,7 +453,7 @@ class Menu(ttk.Frame):
         self.address_buttons = []
         
     def create_mainWidgets(self):
-        self.text1 = ttk.Label(self, text="Insert Username")
+        self.text1 = ttk.Label(self, text="Insert username")
         self.text1.pack(expand=True, fill="both")
         
         self.text2 = ttk.Label(self)

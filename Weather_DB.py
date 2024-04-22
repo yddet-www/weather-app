@@ -37,43 +37,55 @@ class WeatherDB(
         
         return tables
     
-    
-    # Returns a list of tuples from a given table
-    def read(self, table, row = -1):
-        stmt = f"SELECT * FROM {table}"
-        result = None
-        pk = ", ".join(self.get_pk(table))
+    def alert_forecast(self):
+        stmt = """
+        WITH alert_locations AS (
+            SELECT lat, lon, alert_id
+            FROM location_alert
+        )
+        SELECT hf.startTime, hf.temp_f, hf.precipitate, hf.humidity, hf.wind_mph, hf.shortForecast,
+            loc.state, loc.county, loc.city
+        FROM hourly_forecast hf
+        JOIN alert_locations al ON hf.gridX = (
+            SELECT gridX FROM location WHERE lat = al.lat AND lon = al.lon
+        )
+        AND hf.gridY = (
+            SELECT gridY FROM location WHERE lat = al.lat AND lon = al.lon
+        )
+        JOIN weather_alert wa ON al.alert_id = wa.alert_id
+        JOIN location loc ON al.lat = loc.lat AND al.lon = loc.lon;
+        """
         
-        stmt = stmt + " ORDER BY " + pk
+        connection = get_connection()
+        cursor = connection.cursor()
         
-        if row != -1:
-            stmt = stmt + f" LIMIT {row}"
-            
-        self.cursor.execute(stmt)
-        result = self.cursor.fetchall()            
-
+        cursor.execute(stmt)
+        result = cursor.fetchall()
+        
+        connection.close()
+        cursor.close()
+        
         return result
     
-    
-    # Update existing values of existing table
-    # Condition limited to PK comparison, and data_pair is expecting a tuple pair
-    def update(self, table, pk_cond, data_pair):
-        stmt = f"UPDATE {table} SET {data_pair[0]} = '{data_pair[1]}' "
-        pk = self.get_pk(table)
-        cond = f"WHERE {pk[0]} = '{pk_cond[0]}'"
+    def city_avg_temp(self):
+        stmt = """
+        SELECT l.state, l.city, AVG(df.temp_f) AS avg_temp
+        FROM daily_forecast df
+        JOIN location l ON df.gridX = l.gridX AND df.gridY = l.gridY
+        GROUP BY l.state, l.city;
+        """
         
-        for i in range(1, len(pk)):
-            cond = cond + f" AND {pk[i]} = '{pk_cond[i]}'"
+        connection = get_connection()
+        cursor = connection.cursor()
         
-        stmt = stmt + cond
-        self.cursor.execute(stmt)
+        cursor.execute(stmt)
+        result = cursor.fetchall()
         
-        return 1
-    
+        connection.close()
+        cursor.close()
+        
+        return result
     
 # ###############
 # TESTING AREA
 # ###############
-
-# handler = WeatherDB()
-# print(handler.read_locationAlert())

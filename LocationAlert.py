@@ -118,7 +118,7 @@ class LocationAlertHandler:
     
     def insert_locationAlert(self, lat, lon, alert_id):
         stmt = (
-            "INSERT INTO location_alert (lat, lon, alert_id) "
+            "INSERT IGNORE INTO location_alert (lat, lon, alert_id) "
             "VALUES (%s, %s, %s)"
         )
         

@@ -95,8 +95,14 @@ class WeatherAlertHandler():
     # assuming dates are as passed from NWS in the format %Y-%m-%dT%H:%M:%S (removed timezone, datetime is local time)
     def insert_weatherAlert(self, alert_id, title, onset, ending, descript, instruction):
         stmt = (
-            "INSERT INTO weather_alert (alert_id, title, onset, ending, descript, instruction) "
+            "INSERT INTO weather_alert (alert_id, title, onset, ending, descript, instruction)"
             "VALUES (%s, %s, %s, %s, %s, %s)"
+            "ON DUPLICATE KEY UPDATE "
+                "title = VALUES(title), "
+                "onset = VALUES(onset), "
+                "ending = VALUES(ending), "
+                "descript = VALUES(descript), "
+                "instruction = VALUES(instruction); "
         )
         
         onsetF = datetime.strptime(onset, '%Y-%m-%dT%H:%M:%S').strftime('%Y-%m-%d %H:%M:%S')
@@ -114,6 +120,21 @@ class WeatherAlertHandler():
         cursor = connection.cursor()
         
         cursor.execute(stmt, data)
+        connection.commit()
+        
+        connection.close()
+        cursor.close()
+        
+        return 1
+    
+    
+    def refresh_weatherAlert(self):
+        stmt = f"DELETE FROM weather_alert WHERE ending < NOW()"
+        
+        connection = get_connection()
+        cursor = connection.cursor()
+        
+        cursor.execute(stmt)
         connection.commit()
         
         connection.close()
